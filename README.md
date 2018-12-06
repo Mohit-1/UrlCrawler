@@ -35,7 +35,7 @@ A RESTful API to test if the resource at a URL uses jQuery
    
 ### How it works -
 
-The HTTP GET request contains a query parameter 'url'(with appropriate schema). The API consumes this request and uses the requests library, Beautiful Soup and re (Regualar expressions module) to parse the HTML source of the resource to figure out if jQuery is being used.
+The HTTP GET request contains a query parameter 'url'(with appropriate schema). The API consumes this request and uses the requests library, Beautiful Soup and re (Regular expressions module) to parse the HTML source of the resource to figure out if jQuery is being used.
 
 ### API reference - 
 
