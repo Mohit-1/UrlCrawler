@@ -23,8 +23,9 @@ def findIfJQueryExists(url):
         or "https://code.jquery.com/jquery-1.12.4.min.js"
         On the other hand, 'pattern_unofficial' checks if there is a reference to jQuery
         which is not using the official URL in the 'src' attribute"""
-        
-    pattern_official = re.compile("http[s]{0,1}://ajax\.googleapis\.com/ajax/libs/jquery/([0-9]\.[0-9]+\.[0-9]+)/jquery(\.min){0,1}\.js|http[s]{0,1}://code\.jquery\.com/jquery-([0-9]\.[0-9]+\.[0-9]+)(\.min){0,1}\.js")
+    pattern_official = re.compile("http[s]{0,1}://ajax\.googleapis\.com/ajax/libs"
+                                  "/jquery/([0-9]\.[0-9]+\.[0-9]+)/jquery(\.min){0,1}\.js|http[s]{0,1}:"
+                                  "//code\.jquery\.com/jquery-([0-9]\.[0-9]+\.[0-9]+)(\.min){0,1}\.js")
     pattern_unofficial = re.compile("jquery(\.min){0,1}\.js")
 
     abort_loop = False
