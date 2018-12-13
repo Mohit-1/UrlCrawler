@@ -16,9 +16,14 @@ def findIfJQueryExists(url):
         # Invalid URL or a URL missing the protocol are caught here
         data_dict["success"] = False
         return data_dict
-
     soup = BeautifulSoup(page_response.content, "html.parser")
 
+    # 'pattern_official' checks if jQuery is imported using official URLs
+    # eg-"https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"
+    # or "https://code.jquery.com/jquery-1.12.4.min.js"
+
+    # 'pattern_unofficial' checks if there is a reference to jQuery
+    # which is not using the official URL in the 'src' attribute
     pattern_official = re.compile("http[s]{0,1}://ajax\.googleapis\.com/ajax/libs/jquery/([0-9]\.[0-9]+\.[0-9]+)/jquery(\.min){0,1}\.js|http[s]{0,1}://code\.jquery\.com/jquery-([0-9]\.[0-9]+\.[0-9]+)(\.min){0,1}\.js")
     pattern_unofficial = re.compile("jquery(\.min){0,1}\.js")
 
@@ -27,21 +32,21 @@ def findIfJQueryExists(url):
         # Only collect those script tags which have an 'src' attribute
         if abort_loop:
             break
-
         match = pattern_official.search(script['src'])
         if match:
             data_dict["uses_jquery"] = "yes"
             data_dict["version"] = match.group(1) if match.group(1) else match.group(3)
-            # Tricky part! Replacing the '<' with '&lt;'
+            # group(1) and group(3) are groups in 'pattern_official'
+            # regex that store the version of jQuery
             data_dict["found_in_line"] = str(script).split("</script>")[0].replace('<', '&lt;')
+            # Tricky part! Replacing the '<' with '&lt;'
             abort_loop = True
-
         elif (script['src'] == "http://code.jquery.com/jquery-latest.min.js" or
               script['src'] == "https://code.jquery.com/jquery-latest.min.js"):
+            # This scenario can't extract version as 'latest' is used in the URL
             data_dict["uses_jquery"] = "yes"
             data_dict["found_in_line"] = str(script).split("</script>")[0].replace('<', '&lt;')
             abort_loop = True
-
         elif pattern_unofficial.search(script['src']):
             data_dict["uses_jquery"] = "maybe"
             data_dict["found_in_line"] = str(script).split("</script>")[0].replace('<', '&lt;')
